@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rat</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the Hell!</h1>
+        <form id="urlForm">
+            <input type="text" id="url" placeholder="Enter URL" required>
+            <button type="submit">Submit</button>
+        </form>
+        <div class="response" id="response" style="display:none;"></div>
+    </div>
+    <script>
+        document.getElementById('urlForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const url = document.getElementById('url').value;
+            fetch('/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({ 'url': url })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const responseDiv = document.getElementById('response');
+                if (data.flag) {
+                    responseDiv.innerHTML = `<strong>Flag:</strong> ${data.flag}`;
+                } else {
+                    responseDiv.innerHTML = `<strong>Response:</strong> ${data.response || data.error}`;
+                }
+                responseDiv.style.display = 'block';
+            })
+            .catch(error => {
+                document.getElementById('response').innerHTML = `<strong>Error:</strong> ${error.message}`;
+            });
+        });
+    </script>
+</body>
+</html>
+
