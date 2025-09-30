@@ -1,0 +1,1 @@
+export WERKZEUG_DEBUG_PIN=1337;python3 app.py
