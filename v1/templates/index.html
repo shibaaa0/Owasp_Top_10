@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Broken Access Control</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body style="background-image: url('{{ url_for('static', filename='background.png') }}');">
+    <div class="center-container">
+        <div class="login-form">
+            <h2>Login</h2>
+            {% if loginError %}
+                <p class="error-message">{{ loginError }}</p>
+            {% endif %}
+            <form method="post">
+                <div class="input-group">
+                    <input type="text" name="username" placeholder="Username">
+                </div>
+                <div class="input-group">
+                    <input type="password" name="password" placeholder="Password">
+                </div>
+                <input type="submit" value="Login">
+            </form>
+        </div>
+    </div>
+</body>
+</html>

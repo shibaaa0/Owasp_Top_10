@@ -21,23 +21,22 @@ body {
 
 .login-form {
     background-color: #1e1e1e;
-    padding: 30px;
+    padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px 0 rgba(255, 0, 0, 0.5);
     text-align: center;
-    margin-bottom: 30px;
 }
 
 .input-group {
     margin-bottom: 15px;
 }
 
-.input-group label {
+label {
     display: block;
     margin-bottom: 5px;
 }
 
-.input-group input[type="email"],.input-group input[type="id"], .input-group input[type="text"], .input-group input[type="password"] {
+input[type="text"], input[type="password"] {
     width: 80%;
     padding: 10px;
     border: none;
@@ -60,17 +59,12 @@ input[type="submit"]:hover {
     background-color: #A70D2A;
 }
 
-.text-center {
-    text-align: center;
-}
-
-.text-center a {
-    color: #A70D2A;
-    text-decoration: none;
+h2 {
+    color: whitesmoke;
 }
 
 .error-message {
-    color: whitesmoke;
+    color: #A70D2A;
 }
 
 @media (max-width: 600px) {
@@ -83,21 +77,56 @@ input[type="submit"]:hover {
     }
 }
 
-#typingContainer {
+.account-details {
+    background-color: #1e1e1e;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px 0 rgba(255, 0, 0, 0.5);
+    text-align: left;
+}
+
+.account-details h3 {
+    color: #A70D2A;
+    margin-bottom: 15px;
+}
+
+.account-details p {
+    color: white;
+    margin-bottom: 10px;
+}
+
+.error-message {
+    background-color: #1e1e1e;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px 0 rgba(255, 0, 0, 0.5);
+    color: #A70D2A;
+    text-align: center;
+}
+
+.label-container {
+    background-color: #1e1e1e;
+    border-radius: 5px;
+    box-shadow: 0 0 10px 0 rgba(255, 0, 0, 0.5);
+    padding: 20px;
+    text-align: center;
+}
+
+.label-container h3 {
+    color: #A70D2A;
+    margin-bottom: 20px;
+}
+
+.account-details {
+    text-align: center;
+    color: white;
+}
+
+.account-details p {
+    margin: 5px 0;
+}
+
+.error-message {
+    color: #A70D2A;
     margin-top: 20px;
-    font-family: 'Arial', sans-serif;
-    font-size: 24px;
-    white-space: nowrap;
-    overflow: hidden;
-    border-right: 3px solid;
-    animation: blinkCursor 0.1s steps(60, end) infinite;
-}
-
-@keyframes blinkCursor {
-    from { border-right-color: black; }
-    to { border-right-color: transparent; }
-}
-
-#display {
-    margin-top: 20px; 
 }
