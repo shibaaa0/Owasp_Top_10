@@ -1,10 +1,10 @@
 from flask import Flask, request, redirect, url_for, g, send_file
 import sqlite3
 import os
+import hashlib
 
 app = Flask(__name__)
-DATABASE = "database.db"
-app.secret_key = "supersecret"  
+DATABASE = "database.db"  
 
 def get_db():
     db = getattr(g, "_database", None)
@@ -24,13 +24,14 @@ def login():
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
+        password = hashlib.md5(password.encode()).hexdigest()
 
         db = get_db()
         cur = db.execute("SELECT * FROM user WHERE username=? AND password=?", (username, password))
         user = cur.fetchone()
 
         if user:
-            return redirect(url_for("welcome", username=user["username"]))
+            return redirect(url_for("welcome"))
         else:
             return """
                 <h3>Login failed! Try again.</h3>
@@ -48,10 +49,7 @@ def login():
 
 @app.route("/welcome")
 def welcome():
-    username = request.args.get("username")
-    if not username:
-        return redirect("/")
-    return f"<h2>Welcome, {username}!</h2>"
+    return f"<h2>Welcome!</h2>"
 
 @app.route("/robots.txt")
 def robots():
