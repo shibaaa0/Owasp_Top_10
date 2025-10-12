@@ -4,11 +4,8 @@ import os
 
 app = Flask(__name__)
 DATABASE = "database.db"
-app.secret_key = "supersecret"  # cần cho việc redirect an toàn
+app.secret_key = "supersecret"  
 
-# ==========================
-# 🔹 HÀM LẤY DATABASE
-# ==========================
 def get_db():
     db = getattr(g, "_database", None)
     if db is None:
@@ -22,9 +19,6 @@ def close_connection(exception):
     if db is not None:
         db.close()
 
-# ==========================
-# 🔹 ROUTE LOGIN (/)
-# ==========================
 @app.route("/", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -36,7 +30,6 @@ def login():
         user = cur.fetchone()
 
         if user:
-            # chuyển hướng sang trang welcome
             return redirect(url_for("welcome", username=user["username"]))
         else:
             return """
@@ -53,9 +46,6 @@ def login():
         </form>
     """
 
-# ==========================
-# 🔹 ROUTE WELCOME
-# ==========================
 @app.route("/welcome")
 def welcome():
     username = request.args.get("username")
@@ -63,9 +53,6 @@ def welcome():
         return redirect("/")
     return f"<h2>Welcome, {username}!</h2>"
 
-# ==========================
-# 🔹 ROUTE ROBOTS.TXT
-# ==========================
 @app.route("/robots.txt")
 def robots():
     content = """User-agent: *
@@ -74,17 +61,11 @@ Allow: /
 """
     return content, 200, {"Content-Type": "text/plain"}
 
-# ==========================
-# 🔹 ROUTE DOWNLOAD DATABASE
-# ==========================
 @app.route("/database.db")
 def download_db():
     if not os.path.exists(DATABASE):
         return "Database not found!", 404
     return send_file(DATABASE, as_attachment=True)
 
-# ==========================
-# 🔹 CHẠY ỨNG DỤNG
-# ==========================
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000)
+    app.run(host="0.0.0.0", port=8000, debug=False)

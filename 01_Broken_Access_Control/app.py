@@ -17,9 +17,31 @@ def close_connection(exception):
     if db is not None:
         db.close()
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def index():
-    return redirect("/register")
+    if request.method == "POST":
+        if "login" in request.form:
+            username = request.form["username"]
+            password = request.form["password"]
+            db = get_db()
+            cur = db.execute("SELECT * FROM user WHERE username=? AND password=?", (username, password))
+            user = cur.fetchone()
+            if user:
+                return redirect(f"/secret?id={user['id']}")
+            else:
+                return "Invalid username or password!"
+        elif "register" in request.form:
+            return redirect("/register")
+
+    return """
+    <h2>Login</h2>
+    <form method="post">
+        Username: <input name="username"><br>
+        Password: <input name="password" type="password"><br><br>
+        <button type="submit" name="login">Login</button>
+        <button type="submit" name="register">Register</button>
+    </form>
+    """
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -32,11 +54,11 @@ def register():
             db.execute("INSERT INTO user (username, password, secret) VALUES (?, ?, ?)",
                        (username, password, secret))
             db.commit()
-            return "Đăng ký thành công! <a href='/login'>Đăng nhập</a>"
+            return "Registration successful! <a href='/'>Go back to login</a>"
         except sqlite3.IntegrityError:
-            return "Tên người dùng đã tồn tại!"
+            return "Username already exists!"
     return """
-    <h2>Đăng ký</h2>
+    <h2>Register</h2>
     <form method="post">
         Username: <input name="username"><br>
         Password: <input name="password" type="password"><br>
@@ -45,41 +67,20 @@ def register():
     </form>
     """
 
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
-        db = get_db()
-        cur = db.execute("SELECT * FROM user WHERE username=? AND password=?", (username, password))
-        user = cur.fetchone()
-        if user:
-            return redirect(f"/secret?id={user['id']}")
-        else:
-            return "Sai username hoặc password!"
-    return """
-    <h2>Đăng nhập</h2>
-    <form method="post">
-        Username: <input name="username"><br>
-        Password: <input name="password" type="password"><br>
-        <input type="submit" value="Login">
-    </form>
-    """
-
 @app.route("/secret")
 def secret():
     user_id = request.args.get("id")
     if not user_id:
-        return "Thiếu id!"
+        return "Missing id!"
     db = get_db()
     cur = db.execute("SELECT * FROM user WHERE id=?", (user_id,))
     row = cur.fetchone()
     if row:
         return f"""
-        <h2>Secret của {row['username']}:</h2>
+        <h2>Secret of {row['username']}:</h2>
         <p>{row['secret']}</p>
         """
-    return "Không tìm thấy user!"
+    return "User not found!"
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000)
+    app.run(host="0.0.0.0", port=8000, debug=False)
