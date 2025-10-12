@@ -8,7 +8,7 @@ import json
 
 app = Flask(__name__)
 
-TEST_FILE = "test.txt"
+TEST_FILE = "flag.txt"
 LOG_FILE = "logs.txt"
 LOCK = threading.Lock()
 
@@ -106,48 +106,28 @@ def diff_ops(old: str, new: str):
 
 def append_log_entry(ip: str, ops, old_preview: str, new_preview: str):
     """
-    Append a structured, readable log entry to LOG_FILE.
-    Uses a combined plain-text + JSON line for easier reading and parsing.
+    Log chi tiết để có thể phục hồi file test.txt từ đầu.
     """
-    timestamp = datetime.datetime.utcnow().isoformat() + "Z"
-    entry = {
-        "time": timestamp,
-        "ip": ip,
-        "ops": ops
-    }
-    # human readable summary
-    lines = []
-    lines.append(f"--- LOG ENTRY {timestamp} ---")
-    lines.append(f"IP: {ip}")
-    if not ops:
-        lines.append("No changes detected.")
-    else:
-        lines.append("Operations:")
-        for op in ops:
-            tag = op.get("tag")
-            if tag == "replace":
-                lines.append(f"  - replace old[{op['old_pos'][0]}:{op['old_pos'][1]}] -> new[{op['new_pos'][0]}:{op['new_pos'][1]}], "
-                             f"old_text={repr(op['old_text'])}, new_text={repr(op['new_text'])}")
-            elif tag == "delete":
-                lines.append(f"  - delete old[{op['old_pos'][0]}:{op['old_pos'][1]}], text={repr(op['deleted_text'])}")
-            elif tag == "insert":
-                lines.append(f"  - insert at new[{op['new_pos'][0]}:{op['new_pos'][1]}], text={repr(op['inserted_text'])}")
-            else:
-                lines.append(f"  - {op}")
-    # optional small previews (first 200 chars)
-    lines.append("Old preview (first 200 chars):")
-    lines.append(old_preview[:200])
-    lines.append("New preview (first 200 chars):")
-    lines.append(new_preview[:200])
-    lines.append("")  # blank line
-    # Write atomically with lock
+    timestamp = datetime.datetime.now().strftime("%d/%b/%Y %H:%M:%S")
+
     with LOCK:
         with open(LOG_FILE, "a", encoding="utf-8") as f:
-            f.write("\n".join(lines))
-            f.write("\n")
-            # Also append machine-readable JSON line for parsers
-            f.write(json.dumps(entry, ensure_ascii=False))
-            f.write("\n\n")
+            for op in ops:
+                tag = op["tag"]
+                if tag == "replace":
+                    line = (f'{ip} - - [{timestamp}] REPLACE old[{op["old_pos"][0]}:{op["old_pos"][1]}] '
+                            f'-> new[{op["new_pos"][0]}:{op["new_pos"][1]}] '
+                            f'{json.dumps(op["old_text"])} -> {json.dumps(op["new_text"])}\n')
+                elif tag == "insert":
+                    line = (f'{ip} - - [{timestamp}] INSERT new[{op["new_pos"][0]}:{op["new_pos"][1]}] '
+                            f'{json.dumps(op["inserted_text"])}\n')
+                elif tag == "delete":
+                    line = (f'{ip} - - [{timestamp}] DELETE old[{op["old_pos"][0]}:{op["old_pos"][1]}] '
+                            f'{json.dumps(op["deleted_text"])}\n')
+                else:
+                    line = f'{ip} - - [{timestamp}] UNKNOWN {json.dumps(op)}\n'
+
+                f.write(line)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -193,4 +173,4 @@ def get_logs():
 
 if __name__ == "__main__":
     # For development only. In production, dùng WSGI server như gunicorn.
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=8000, debug=False)

@@ -1,23 +1,7 @@
---- LOG ENTRY 2025-10-11T14:36:18.042539Z ---
-IP: 127.0.0.1
-Operations:
-  - insert at new[15:16], text='b'
-  - delete old[17:18], text='a'
-Old preview (first 200 chars):
-Hello, I'm shibaaa
-New preview (first 200 chars):
-Hello, I'm shibbaa
-
-{"time": "2025-10-11T14:36:18.042539Z", "ip": "127.0.0.1", "ops": [{"tag": "insert", "new_pos": [15, 16], "inserted_text": "b"}, {"tag": "delete", "old_pos": [17, 18], "deleted_text": "a"}]}
-
---- LOG ENTRY 2025-10-11T14:37:21.148676Z ---
-IP: 192.168.0.4
-Operations:
-  - replace old[12:18] -> new[12:14], old_text='hibbaa', new_text='on'
-Old preview (first 200 chars):
-Hello, I'm shibbaa
-New preview (first 200 chars):
-Hello, I'm son
-
-{"time": "2025-10-11T14:37:21.148676Z", "ip": "192.168.0.4", "ops": [{"tag": "replace", "old_pos": [12, 18], "new_pos": [12, 14], "old_text": "hibbaa", "new_text": "on"}]}
-
+127.0.0.1 - - [12/Oct/2025 23:26:48] DELETE old[11:14] "son"
+127.0.0.1 - - [12/Oct/2025 23:26:56] INSERT new[3:6] "123"
+192.168.0.4 - - [12/Oct/2025 23:27:42] INSERT new[13:26] "dhjsjdndndndc"
+127.0.0.1 - - [12/Oct/2025 23:27:47] DELETE old[13:26] "dhjsjdndndndc"
+127.0.0.1 - - [12/Oct/2025 23:27:52] INSERT new[14:15] "j"
+192.168.0.4 - - [12/Oct/2025 23:27:57] INSERT new[13:26] "dhjsjdndndndc"
+192.168.0.4 - - [12/Oct/2025 23:27:57] DELETE old[14:15] "j"
