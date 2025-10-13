@@ -5,22 +5,20 @@ from collections import defaultdict, deque
 import random
 
 app = Flask(__name__)
-app.secret_key = "dev-secret-key"
+flag=open("flag.txt","r").read()
+print(flag)
+app.secret_key = "change_this_to_a_random_secret"
 
-# ======= CONFIG =======
-REQUEST_LIMIT = 5        # max requests per window per IP
-WINDOW_SECONDS = 60 * 60 # 1 hour
+REQUEST_LIMIT = 5       
+WINDOW_SECONDS = 60 * 60 
 USE_HEADER_FOR_IP = True
 
-# Generate a random 6-digit "OTP-like" secret at startup
-REAL_CODE = f"{random.randint(0, 999999):06d}"  # e.g. "042719"
-SECRET_TEXT = REAL_CODE
+REAL_CODE = f"{random.randint(0, 999999):06d}"  
 
 print("==== LAB START ====")
 print("Secret (6-digit OTP) for this lab is:", REAL_CODE)
 print("==== KEEP THIS FOR INSTRUCTOR/DEBUG ====")
 
-# In-memory rate store: maps ip -> deque of timestamps
 rate_store = defaultdict(deque)
 
 TEMPLATE = """
@@ -41,11 +39,10 @@ TEMPLATE = """
   <button type="submit">Submit</button>
 </form>
 {% if secret %}
-  <h3>Secret (OTP):</h3>
+  <h3>My Secret:</h3>
   <pre>{{ secret }}</pre>
 {% endif %}
 <hr>
-<p><strong>Note:</strong> Vulnerable demo: server rate-limits by IP but trusts headers like <code>X-Forwarded-For</code>. This allows spoofing to bypass limits.</p>
 """
 
 def now_ts():
@@ -88,11 +85,11 @@ def index():
 
         code = (request.form.get("code") or "").strip()
         if code == REAL_CODE:
-            secret = SECRET_TEXT
+            secret = flag
         else:
             flash("Wrong code.")
 
     return render_template_string(TEMPLATE, secret=secret)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=8000, debug=False)
