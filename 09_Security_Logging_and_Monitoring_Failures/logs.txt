@@ -1,7 +1,3 @@
-127.0.0.1 - - [12/Oct/2025 23:26:48] DELETE old[11:14] "son"
-127.0.0.1 - - [12/Oct/2025 23:26:56] INSERT new[3:6] "123"
-192.168.0.4 - - [12/Oct/2025 23:27:42] INSERT new[13:26] "dhjsjdndndndc"
-127.0.0.1 - - [12/Oct/2025 23:27:47] DELETE old[13:26] "dhjsjdndndndc"
-127.0.0.1 - - [12/Oct/2025 23:27:52] INSERT new[14:15] "j"
-192.168.0.4 - - [12/Oct/2025 23:27:57] INSERT new[13:26] "dhjsjdndndndc"
-192.168.0.4 - - [12/Oct/2025 23:27:57] DELETE old[14:15] "j"
+[2025-10-13 21:50:28.397163] IP=127.0.0.1 | Vigenere key='123'
+[2025-10-13 21:50:32.465929] IP=127.0.0.1 | Vigenere key='lolo'
+[2025-10-13 21:50:38.609595] IP=127.0.0.1 | Vigenere key='dhdhdhdd gff'
