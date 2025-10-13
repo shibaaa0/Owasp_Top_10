@@ -14,3 +14,15 @@ Below is a concise list of the categories (latest common framing), each with a s
 8. **Software and Data Integrity Failures** — Lack of integrity checks allowing tampered code or data to be accepted.  
 9. **Security Logging and Monitoring Failures** — Insufficient logging or alerting that prevents timely detection and response.  
 10. **Server-Side Request Forgery (SSRF)** — Server-side fetching of untrusted URLs that can access internal systems or sensitive resources.
+
+
+## 🚀 How to use
+1. **Install Docker**  
+     ```sh
+     sudo apt update && sudo apt install docker.io -y
+     ```
+
+2. **Build and run the lab**
+    ```sh
+    ./run.sh
+    ```
